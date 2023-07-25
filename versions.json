@@ -16,6 +16,23 @@
         ],
         "fpm_directories": ["bin","include","lib"]
     },
+    "avro-libstdcxx": {
+        "commitish": "release-1.11.0",
+        "version_string": "1.11.0",
+        "license": "Apache License 2.0",
+        "consortium_build_number": "2",
+        "externals_root": "opt/irods-externals",
+        "build_steps": [
+            "mkdir -p lang/c++/build",
+            "cd lang/c++/build; rm -f CMakeCache.txt;TEMPLATE_CMAKE_EXECUTABLE -G 'Unix Makefiles' -DCMAKE_INSTALL_RPATH=/TEMPLATE_BOOST_LIBSTDCXX_RPATH -DCMAKE_INSTALL_PREFIX=TEMPLATE_INSTALL_PREFIX -DBOOST_ROOT=TEMPLATE_BOOST_LIBSTDCXX_ROOT -DCMAKE_CXX_COMPILER=TEMPLATE_CLANGPP_EXECUTABLE -DCMAKE_C_COMPILER=TEMPLATE_CLANG_EXECUTABLE -DCMAKE_CXX_FLAGS='-std=c++14' ..",
+            "cd lang/c++/build; env LD_LIBRARY_PATH='/TEMPLATE_BOOST_LIBSTDCXX_ROOT/lib' make -jTEMPLATE_JOBS; make install"
+        ],
+        "external_build_steps": [
+            "cd lang/c++/build",
+            "ls -l TEMPLATE_INSTALL_PREFIX/../* ; cp -rf TEMPLATE_INSTALL_PREFIX/../* ../../ ; ls -l ../../"
+        ],
+        "fpm_directories": ["bin","include","lib"]
+    },
     "aws-sdk-cpp": {
         "commitish": "1.9.323",
         "version_string": "1.9.323",
@@ -25,6 +42,22 @@
         "build_steps": [
             "mkdir -p build",
             "cd build; TEMPLATE_CMAKE_EXECUTABLE -G 'Unix Makefiles' -DENABLE_TESTING=OFF -DCMAKE_INSTALL_PREFIX=TEMPLATE_INSTALL_PREFIX -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_CXX_COMPILER=TEMPLATE_CLANGPP_EXECUTABLE -DCMAKE_SHARED_LINKER_FLAGS='-LTEMPLATE_CLANG_CPP_LIBRARIES -stdlib=libc++' -DCMAKE_EXE_LINKER_FLAGS='-LTEMPLATE_CLANG_CPP_LIBRARIES -stdlib=libc++' -DCMAKE_INCLUDE_DIRECTORIES_BEFORE=ON -DCMAKE_CXX_FLAGS='-ITEMPLATE_CLANG_CPP_HEADERS -nostdinc++' -DBUILD_ONLY='s3;sts' ..",
+            "cd build; make -jTEMPLATE_JOBS; make install"
+        ],
+        "external_build_steps": [
+            "ls -l TEMPLATE_INSTALL_PREFIX/../* ; cp -rf TEMPLATE_INSTALL_PREFIX/../* ../../ ; ls -l ../../"
+        ],
+        "fpm_directories": ["include","lib","lib64"]
+    },
+    "aws-sdk-cpp-libstdcxx": {
+        "commitish": "1.9.323",
+        "version_string": "1.9.323",
+        "license": "Apache License 2.0",
+        "consortium_build_number": "0",
+        "externals_root": "opt/irods-externals",
+        "build_steps": [
+            "mkdir -p build",
+            "cd build; TEMPLATE_CMAKE_EXECUTABLE -G 'Unix Makefiles' -DENABLE_TESTING=OFF -DCMAKE_INSTALL_PREFIX=TEMPLATE_INSTALL_PREFIX -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_CXX_COMPILER=TEMPLATE_CLANGPP_EXECUTABLE -DBUILD_ONLY='s3;sts' ..",
             "cd build; make -jTEMPLATE_JOBS; make install"
         ],
         "external_build_steps": [
@@ -44,6 +77,24 @@
             "./bootstrap.sh --prefix=TEMPLATE_INSTALL_PREFIX --with-python=/usr/bin/python3",
             "./b2 headers",
             "./b2 install toolset=clang --without-mpi threading=multi link=shared cxxflags='-fPIC -DBOOST_SYSTEM_NO_DEPRECATED -stdlib=libc++ -std=c++14 -nostdinc++ -ITEMPLATE_CLANG_CPP_HEADERS' linkflags='-stdlib=libc++ -Wl,-rpath,/TEMPLATE_CLANG_RUNTIME_RPATH:/TEMPLATE_BOOST_RPATH' -jTEMPLATE_JOBS"
+        ],
+        "external_build_steps": [
+            "ls -l TEMPLATE_INSTALL_PREFIX/../* ; cp -rf TEMPLATE_INSTALL_PREFIX/../* ../../ ; ls -l ../../"
+        ],
+        "fpm_directories": ["include","lib"]
+    },
+    "boost-libstdcxx": {
+        "git_repository": "https://github.com/boostorg/boost",
+        "commitish": "boost-1.81.0",
+        "version_string": "1.81.0",
+        "license": "Boost Software License 1.0",
+        "consortium_build_number": "0",
+        "externals_root": "opt/irods-externals",
+        "build_steps": [
+            "git submodule update --init",
+            "./bootstrap.sh --prefix=TEMPLATE_INSTALL_PREFIX --with-python=/usr/bin/python3",
+            "./b2 headers",
+            "./b2 install toolset=clang --without-mpi threading=multi link=shared cxxflags='-fPIC -DBOOST_SYSTEM_NO_DEPRECATED -std=c++14' linkflags='-Wl,-rpath,/TEMPLATE_BOOST_LIBSTDCXX_RPATH' -jTEMPLATE_JOBS"
         ],
         "external_build_steps": [
             "ls -l TEMPLATE_INSTALL_PREFIX/../* ; cp -rf TEMPLATE_INSTALL_PREFIX/../* ../../ ; ls -l ../../"
@@ -135,6 +186,22 @@
         ],
         "fpm_directories": ["include","lib"]
     },
+    "cppzmq-libstdcxx": {
+        "commitish": "v4.8.1",
+        "version_string": "4.8.1",
+        "license": "LGPL v3",
+        "consortium_build_number": "1",
+        "externals_root": "opt/irods-externals",
+        "build_steps": [
+            "mkdir -p build",
+            "cd build; TEMPLATE_CMAKE_EXECUTABLE .. -G'Unix Makefiles' -DCMAKE_USER_MAKE_RULES_OVERRIDE=TEMPLATE_SCRIPT_PATH/ClangOverrides.txt -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=TEMPLATE_INSTALL_PREFIX -DCMAKE_INSTALL_LIBDIR=lib -DZeroMQ_INCLUDE_DIR=TEMPLATE_ZMQ_LIBSTDCXX_PATH/include -DZeroMQ_INCLUDE_DIR=TEMPLATE_ZMQ_LIBSTDCXX_PATH/include -DZeroMQ_LIBRARY=TEMPLATE_ZMQ_LIBSTDCXX_PATH/lib/libzmq.so -Dpkgcfg_lib_PC_LIBZMQ_zmq=TEMPLATE_ZMQ_LIBSTDCXX_PATH/lib/libzmq.so -DCPPZMQ_BUILD_TESTS=OFF -DCPPZMQ_CMAKECONFIG_INSTALL_DIR=lib/cmake/cppzmq",
+            "cd build; make -jTEMPLATE_JOBS; make install"
+        ],
+        "external_build_steps": [
+            "ls -l TEMPLATE_INSTALL_PREFIX/../* ; cp -rf TEMPLATE_INSTALL_PREFIX/../* ../../ ; ls -l ../../"
+        ],
+        "fpm_directories": ["include","lib"]
+    },
     "fmt": {
         "commitish": "8.1.1",
         "version_string": "8.1.1",
@@ -144,6 +211,22 @@
         "build_steps": [
             "mkdir -p build",
             "cd build; rm -f CMakeCache.txt;TEMPLATE_CMAKE_EXECUTABLE -G'Unix Makefiles' -DCMAKE_CXX_COMPILER=TEMPLATE_CLANGPP_EXECUTABLE -DCMAKE_C_COMPILER=TEMPLATE_CLANG_EXECUTABLE -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=TRUE -DFMT_TEST=OFF -DCMAKE_INSTALL_PREFIX=TEMPLATE_INSTALL_PREFIX -DCMAKE_CXX_FLAGS='-std=c++17 -nostdinc++ -ITEMPLATE_CLANG_CPP_HEADERS' -DCMAKE_EXE_LINKER_FLAGS='-stdlib=libc++ -LTEMPLATE_CLANG_CPP_LIBRARIES -lc++abi' -DCMAKE_SHARED_LINKER_FLAGS='-stdlib=libc++ -LTEMPLATE_CLANG_CPP_LIBRARIES -lc++abi' -DCMAKE_MODULE_LINKER_FLAGS='-stdlib=libc++ -LTEMPLATE_CLANG_CPP_LIBRARIES -lc++abi' ..",
+            "cd build; make fmt install"
+        ],
+        "external_build_steps": [
+            "ls -l TEMPLATE_INSTALL_PREFIX/../* ; cp -rf TEMPLATE_INSTALL_PREFIX/../* ../../ ; ls -l ../../"
+        ],
+        "fpm_directories": ["include", "lib"]
+    },
+    "fmt-libstdcxx": {
+        "commitish": "8.1.1",
+        "version_string": "8.1.1",
+        "license": "MIT",
+        "consortium_build_number": "0",
+        "externals_root": "opt/irods-externals",
+        "build_steps": [
+            "mkdir -p build",
+            "cd build; rm -f CMakeCache.txt;TEMPLATE_CMAKE_EXECUTABLE -G'Unix Makefiles' -DCMAKE_CXX_COMPILER=TEMPLATE_CLANGPP_EXECUTABLE -DCMAKE_C_COMPILER=TEMPLATE_CLANG_EXECUTABLE -DCMAKE_INSTALL_LIBDIR=lib -DBUILD_SHARED_LIBS=TRUE -DFMT_TEST=OFF -DCMAKE_INSTALL_PREFIX=TEMPLATE_INSTALL_PREFIX -DCMAKE_CXX_FLAGS='-std=c++17' ..",
             "cd build; make fmt install"
         ],
         "external_build_steps": [
@@ -224,12 +307,12 @@
         "commitish": "1.0.6",
         "version_string": "1.0.6",
         "license": "BSD 3-Clause",
-        "consortium_build_number": "0",
+        "consortium_build_number": "1",
         "externals_root": "opt/irods-externals",
         "build_steps": [
             "mkdir -p build",
-            "cd build; rm -f CMakeCache.txt;TEMPLATE_CMAKE_EXECUTABLE -G 'Unix Makefiles' -DCPPZMQ_PATH=TEMPLATE_CPPZMQ_PATH -DZMQ_PATH=TEMPLATE_ZMQ_PATH -DAVRO_PATH=TEMPLATE_AVRO_PATH -DCLANG_LIBS=TEMPLATE_CLANG_CPP_LIBRARIES -DBOOST_PATH=TEMPLATE_BOOST_ROOT -DCMAKE_INSTALL_PREFIX=TEMPLATE_INSTALL_PREFIX -DCMAKE_CXX_COMPILER=TEMPLATE_CLANGPP_EXECUTABLE -DCMAKE_C_COMPILER=TEMPLATE_CLANG_EXECUTABLE -DCMAKE_CXX_FLAGS='-std=c++14 -nostdinc++ -Wno-deprecated-declarations -ITEMPLATE_CLANG_CPP_HEADERS' -DCMAKE_EXE_LINKER_FLAGS='-stdlib=libc++ -LTEMPLATE_CLANG_CPP_LIBRARIES -lc++abi' -DCMAKE_SHARED_LINKER_FLAGS='-stdlib=libc++ -LTEMPLATE_CLANG_CPP_LIBRARIES -lc++abi' -DCMAKE_MODULE_LINKER_FLAGS='-stdlib=libc++ -LTEMPLATE_CLANG_CPP_LIBRARIES -lc++abi' -DIRODS_EXTERNALS_PACKAGE_ROOT=TEMPLATE_SCRIPT_PATH -DCMAKE_INSTALL_RPATH=/TEMPLATE_BOOST_RPATH\\;/TEMPLATE_AVRO_RPATH\\;/TEMPLATE_ZMQ_RPATH\\;/TEMPLATE_LIBARCHIVE_RPATH\\;/TEMPLATE_CLANG_RUNTIME_RPATH ..",
-            "cd build; env LD_LIBRARY_PATH=TEMPLATE_CLANG_CPP_LIBRARIES make -jTEMPLATE_JOBS; make install"
+            "cd build; rm -f CMakeCache.txt;TEMPLATE_CMAKE_EXECUTABLE -G 'Unix Makefiles' -DCPPZMQ_PATH=TEMPLATE_CPPZMQ_LIBSTDCXX_PATH -DZMQ_PATH=TEMPLATE_ZMQ_LIBSTDCXX_PATH -DAVRO_PATH=TEMPLATE_AVRO_LIBSTDCXX_PATH -DBOOST_PATH=TEMPLATE_BOOST_LIBSTDCXX_ROOT -DCMAKE_INSTALL_PREFIX=TEMPLATE_INSTALL_PREFIX -DCMAKE_CXX_COMPILER=TEMPLATE_CLANGPP_EXECUTABLE -DCMAKE_C_COMPILER=TEMPLATE_CLANG_EXECUTABLE -DCMAKE_CXX_FLAGS='-std=c++14 -Wno-deprecated-declarations' -DIRODS_EXTERNALS_PACKAGE_ROOT=TEMPLATE_SCRIPT_PATH -DCMAKE_INSTALL_RPATH=/TEMPLATE_BOOST_LIBSTDCXX_RPATH\\;/TEMPLATE_AVRO_LIBSTDCXX_RPATH\\;/TEMPLATE_ZMQ_LIBSTDCXX_RPATH\\;/TEMPLATE_LIBARCHIVE_RPATH ..",
+            "cd build; make -jTEMPLATE_JOBS; make install"
         ],
         "external_build_steps": [
             "ls -l TEMPLATE_INSTALL_PREFIX/../* ; cp -rf TEMPLATE_INSTALL_PREFIX/../* ../../ ; ls -l ../../"
@@ -254,6 +337,24 @@
         "deb_dependencies": ["libodbc1"],
         "rpm_dependencies": ["unixODBC"]
     },
+    "nanodbc-libstdcxx": {
+        "commitish": "v2.13.0",
+        "version_string": "2.13.0",
+        "license": "MIT",
+        "consortium_build_number": "1",
+        "externals_root": "opt/irods-externals",
+        "build_steps": [
+            "mkdir -p build",
+            "cd build; rm -f CMakeCache.txt;TEMPLATE_CMAKE_EXECUTABLE -G'Unix Makefiles' -DCMAKE_CXX_COMPILER=TEMPLATE_CLANGPP_EXECUTABLE -DCMAKE_C_COMPILER=TEMPLATE_CLANG_EXECUTABLE -DBUILD_SHARED_LIBS=ON -DNANODBC_DISABLE_EXAMPLES=ON -DNANODBC_DISABLE_TESTS=ON -DNANODBC_ODBC_VERSION=SQL_OV_ODBC3 -DCMAKE_INSTALL_PREFIX=TEMPLATE_INSTALL_PREFIX -DNANODBC_FORCE_LIBCXX=OFF -DNANODBC_DISABLE_LIBCXX=ON -DCMAKE_CXX_FLAGS='-std=c++14' ..",
+            "cd build; make nanodbc install"
+        ],
+        "external_build_steps": [
+            "ls -l TEMPLATE_INSTALL_PREFIX/../* ; cp -rf TEMPLATE_INSTALL_PREFIX/../* ../../ ; ls -l ../../"
+        ],
+        "fpm_directories": ["include", "lib"],
+        "deb_dependencies": ["libodbc1"],
+        "rpm_dependencies": ["unixODBC"]
+    },
     "qpid-proton": {
         "commitish": "0.36.0",
         "version_string": "0.36.0",
@@ -263,6 +364,22 @@
         "build_steps": [
             "mkdir -p build",
             "cd build; TEMPLATE_CMAKE_EXECUTABLE -DCMAKE_CXX_COMPILER=TEMPLATE_CLANGPP_EXECUTABLE -DCMAKE_C_COMPILER=TEMPLATE_CLANG_EXECUTABLE -DENABLE_WARNING_ERROR=OFF -DCMAKE_CXX_FLAGS='-nostdinc++ -ITEMPLATE_CLANG_CPP_HEADERS' -DCMAKE_SHARED_LINKER_FLAGS='-LTEMPLATE_CLANG_CPP_LIBRARIES -stdlib=libc++' -DCMAKE_EXE_LINKER_FLAGS='-LTEMPLATE_CLANG_CPP_LIBRARIES -stdlib=libc++' -DCMAKE_BUILD_WITH_INSTALL_RPATH=True -DCMAKE_INSTALL_PREFIX=TEMPLATE_INSTALL_PREFIX -DCMAKE_INSTALL_RPATH=/TEMPLATE_CLANG_RUNTIME_RPATH\\;/TEMPLATE_QPID_PROTON_RPATH -DBUILD_JAVA=OFF -DBUILD_RUBY=OFF -DBUILD_PYTHON=OFF -DSYSINSTALL_BINDINGS=OFF -DENABLE_JSONCPP=OFF -DENABLE_LINKTIME_OPTIMIZATION=NO -DLIB_SUFFIX='' ..",
+            "cd build; make -jTEMPLATE_JOBS; make install"
+        ],
+        "external_build_steps": [
+            "ls -l TEMPLATE_INSTALL_PREFIX/../* ; cp -rf TEMPLATE_INSTALL_PREFIX/../* ../../ ; ls -l ../../"
+        ],
+        "fpm_directories": ["include", "lib"]
+    },
+    "qpid-proton-libstdcxx": {
+        "commitish": "0.36.0",
+        "version_string": "0.36.0",
+        "license": "Apache License 2.0",
+        "consortium_build_number": "1",
+        "externals_root": "opt/irods-externals",
+        "build_steps": [
+            "mkdir -p build",
+            "cd build; TEMPLATE_CMAKE_EXECUTABLE -DCMAKE_CXX_COMPILER=TEMPLATE_CLANGPP_EXECUTABLE -DCMAKE_C_COMPILER=TEMPLATE_CLANG_EXECUTABLE -DENABLE_WARNING_ERROR=OFF -DCMAKE_BUILD_WITH_INSTALL_RPATH=True -DCMAKE_INSTALL_PREFIX=TEMPLATE_INSTALL_PREFIX -DCMAKE_INSTALL_RPATH=/TEMPLATE_QPID_PROTON_LIBSTDCXX_RPATH -DBUILD_JAVA=OFF -DBUILD_RUBY=OFF -DBUILD_PYTHON=OFF -DSYSINSTALL_BINDINGS=OFF -DENABLE_JSONCPP=OFF -DENABLE_LINKTIME_OPTIMIZATION=NO -DLIB_SUFFIX='' ..",
             "cd build; make -jTEMPLATE_JOBS; make install"
         ],
         "external_build_steps": [
@@ -301,6 +418,22 @@
         ],
         "fpm_directories": ["include","lib"]
     },
+    "spdlog-libstdcxx": {
+        "commitish": "v1.9.2",
+        "version_string": "1.9.2",
+        "license": "MIT",
+        "consortium_build_number": "1",
+        "externals_root": "opt/irods-externals",
+        "build_steps": [
+            "mkdir -p build",
+            "cd build; TEMPLATE_CMAKE_EXECUTABLE .. -G'Unix Makefiles' -DCMAKE_USER_MAKE_RULES_OVERRIDE=TEMPLATE_SCRIPT_PATH/ClangOverrides.txt -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=TEMPLATE_INSTALL_PREFIX -DCMAKE_INSTALL_LIBDIR=lib -Dfmt_DIR=TEMPLATE_FMT_LIBSTDCXX_PATH/lib/cmake/fmt -DSPDLOG_FMT_EXTERNAL=ON -DSPDLOG_BUILD_BENCH=OFF -DSPDLOG_BUILD_EXAMPLE=OFF",
+            "cd build; make -jTEMPLATE_JOBS; make install"
+        ],
+        "external_build_steps": [
+            "ls -l TEMPLATE_INSTALL_PREFIX/../* ; cp -rf TEMPLATE_INSTALL_PREFIX/../* ../../ ; ls -l ../../"
+        ],
+        "fpm_directories": ["include","lib"]
+    },
     "zeromq4-1": {
         "commitish": "v4.1.8",
         "version_string": "4.1.8",
@@ -310,6 +443,22 @@
         "build_steps": [
             "mkdir -p build",
             "cd build; env LD_LIBRARY_PATH=TEMPLATE_CLANG_CPP_LIBRARIES TEMPLATE_CMAKE_EXECUTABLE -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=TEMPLATE_INSTALL_PREFIX -DCMAKE_CXX_COMPILER=TEMPLATE_CLANGPP_EXECUTABLE -DCMAKE_C_COMPILER=TEMPLATE_CLANG_EXECUTABLE -DCMAKE_CXX_FLAGS='-std=c++14 -nostdinc++ -ITEMPLATE_CLANG_CPP_HEADERS' -DCMAKE_EXE_LINKER_FLAGS='-stdlib=libc++ -LTEMPLATE_CLANG_CPP_LIBRARIES -lc++abi' -DCMAKE_SHARED_LINKER_FLAGS='-stdlib=libc++ -LTEMPLATE_CLANG_CPP_LIBRARIES -lc++abi' -DCMAKE_MODULE_LINKER_FLAGS='-stdlib=libc++ -LTEMPLATE_CLANG_CPP_LIBRARIES -lc++abi' -DCMAKE_INSTALL_RPATH=/TEMPLATE_CLANG_RUNTIME_RPATH ..",
+            "cd build; make -jTEMPLATE_JOBS; make install"
+        ],
+        "external_build_steps": [
+            "ls -l TEMPLATE_INSTALL_PREFIX/../* ; cp -rf TEMPLATE_INSTALL_PREFIX/../* ../../ ; ls -l ../../"
+        ],
+        "fpm_directories": ["bin","include","lib"]
+    },
+    "zeromq4-1-libstdcxx": {
+        "commitish": "v4.1.8",
+        "version_string": "4.1.8",
+        "license": "LGPL v3",
+        "consortium_build_number": "0",
+        "externals_root": "opt/irods-externals",
+        "build_steps": [
+            "mkdir -p build",
+            "cd build; TEMPLATE_CMAKE_EXECUTABLE -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=TEMPLATE_INSTALL_PREFIX -DCMAKE_CXX_COMPILER=TEMPLATE_CLANGPP_EXECUTABLE -DCMAKE_C_COMPILER=TEMPLATE_CLANG_EXECUTABLE -DCMAKE_CXX_FLAGS='-std=c++14' ..",
             "cd build; make -jTEMPLATE_JOBS; make install"
         ],
         "external_build_steps": [

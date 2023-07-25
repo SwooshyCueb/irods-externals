@@ -184,14 +184,24 @@ def build_package(target, build_native_package):
     # prepare libraries
     cppzmq_root = get_local_path('cppzmq',[])
     log.debug('cppzmq_root: [{0}]'.format(cppzmq_root))
+    cppzmq_libstdcxx_root = get_local_path('cppzmq-libstdcxx',[])
+    log.debug('cppzmq_libstdcxx_root: [{0}]'.format(cppzmq_libstdcxx_root))
     zmq_root = get_local_path('zeromq4-1',[])
     log.debug('zmq_root: [{0}]'.format(zmq_root))
+    zmq_libstdcxx_root = get_local_path('zeromq4-1-libstdcxx',[])
+    log.debug('zmq_libstdcxx_root: [{0}]'.format(zmq_libstdcxx_root))
     avro_root = get_local_path('avro',[])
     log.debug('avro_root: [{0}]'.format(avro_root))
+    avro_libstdcxx_root = get_local_path('avro-libstdcxx',[])
+    log.debug('avro_libstdcxx_root: [{0}]'.format(avro_libstdcxx_root))
     boost_root = get_local_path('boost',[])
     log.debug('boost_root: [{0}]'.format(boost_root))
+    boost_libstdcxx_root = get_local_path('boost-libstdcxx',[])
+    log.debug('boost_libstdcxx_root: [{0}]'.format(boost_libstdcxx_root))
     fmt_root = get_local_path('fmt',[])
     log.debug('fmt_root: [{0}]'.format(fmt_root))
+    fmt_libstdcxx_root = get_local_path('fmt-libstdcxx',[])
+    log.debug('fmt_libstdcxx_root: [{0}]'.format(fmt_libstdcxx_root))
     json_root = get_local_path('json',[])
     log.debug('json_root: [{0}]'.format(json_root))
 
@@ -208,10 +218,20 @@ def build_package(target, build_native_package):
     boost_install_prefix = os.path.join(boost_info['externals_root'], boost_subdirectory)
     boost_rpath = os.path.join(boost_install_prefix, 'lib')
 
+    boost_libstdcxx_info = get_versions()['boost-libstdcxx']
+    boost_libstdcxx_subdirectory = '{0}{1}-{2}'.format('boost-libstdcxx', boost_libstdcxx_info['version_string'], boost_libstdcxx_info['consortium_build_number'])
+    boost_libstdcxx_install_prefix = os.path.join(boost_libstdcxx_info['externals_root'], boost_libstdcxx_subdirectory)
+    boost_libstdcxx_rpath = os.path.join(boost_libstdcxx_install_prefix, 'lib')
+
     avro_info = get_versions()['avro']
     avro_subdirectory = '{0}{1}-{2}'.format('avro', avro_info['version_string'], avro_info['consortium_build_number'])
     avro_install_prefix = os.path.join(avro_info['externals_root'], avro_subdirectory)
     avro_rpath = os.path.join(avro_install_prefix, 'lib')
+
+    avro_libstdcxx_info = get_versions()['avro-libstdcxx']
+    avro_libstdcxx_subdirectory = '{0}{1}-{2}'.format('avro', avro_libstdcxx_info['version_string'], avro_libstdcxx_info['consortium_build_number'])
+    avro_libstdcxx_install_prefix = os.path.join(avro_libstdcxx_info['externals_root'], avro_libstdcxx_subdirectory)
+    avro_libstdcxx_rpath = os.path.join(avro_libstdcxx_install_prefix, 'lib')
 
     libarchive_info = get_versions()['libarchive']
     libarchive_subdirectory = '{0}{1}-{2}'.format('libarchive', libarchive_info['version_string'], libarchive_info['consortium_build_number'])
@@ -222,6 +242,11 @@ def build_package(target, build_native_package):
     zmq_subdirectory = '{0}{1}-{2}'.format('zeromq4-1', zmq_info['version_string'], zmq_info['consortium_build_number'])
     zmq_install_prefix = os.path.join(zmq_info['externals_root'], zmq_subdirectory)
     zmq_rpath = os.path.join(zmq_install_prefix, 'lib')
+
+    zmq_libstdcxx_info = get_versions()['zeromq4-1-libstdcxx']
+    zmq_libstdcxx_subdirectory = '{0}{1}-{2}'.format('zeromq4-1', zmq_libstdcxx_info['version_string'], zmq_libstdcxx_info['consortium_build_number'])
+    zmq_libstdcxx_install_prefix = os.path.join(zmq_libstdcxx_info['externals_root'], zmq_libstdcxx_subdirectory)
+    zmq_libstdcxx_rpath = os.path.join(zmq_libstdcxx_install_prefix, 'lib')
 
     clang_info = get_versions()['clang']
     clang_subdirectory = '{0}{1}-{2}'.format('clang', clang_info['version_string'], clang_info['consortium_build_number'])
@@ -238,6 +263,11 @@ def build_package(target, build_native_package):
     qpid_proton_subdirectory = '{0}{1}-{2}'.format('qpid-proton', qpid_proton_info['version_string'], qpid_proton_info['consortium_build_number'])
     qpid_proton_install_prefix = os.path.join(qpid_proton_info['externals_root'], qpid_proton_subdirectory)
     qpid_proton_rpath = os.path.join(qpid_proton_install_prefix, 'lib')
+
+    qpid_proton_libstdcxx_info = get_versions()['qpid-proton-libstdcxx']
+    qpid_proton_libstdcxx_subdirectory = '{0}{1}-{2}'.format('qpid-proton', qpid_proton_libstdcxx_info['version_string'], qpid_proton_libstdcxx_info['consortium_build_number'])
+    qpid_proton_libstdcxx_install_prefix = os.path.join(qpid_proton_libstdcxx_info['externals_root'], qpid_proton_libstdcxx_subdirectory)
+    qpid_proton_libstdcxx_rpath = os.path.join(qpid_proton_libstdcxx_install_prefix, 'lib')
 
     # get
     if target == 'clang':
@@ -317,17 +347,25 @@ def build_package(target, build_native_package):
         i = re.sub("TEMPLATE_CMAKE_EXECUTABLE", cmake_executable, i)
         i = re.sub("TEMPLATE_QPID_PROTON_SUBDIRECTORY", qpid_proton_subdirectory, i)
         i = re.sub("TEMPLATE_QPID_PROTON_RPATH", qpid_proton_rpath, i)
+        i = re.sub("TEMPLATE_QPID_PROTON_LIBSTDCXX_RPATH", qpid_proton_libstdcxx_rpath, i)
         i = re.sub("TEMPLATE_PYTHON_EXECUTABLE", python_executable, i)
         i = re.sub("TEMPLATE_BOOST_ROOT", boost_root, i)
+        i = re.sub("TEMPLATE_BOOST_LIBSTDCXX_ROOT", boost_libstdcxx_root, i)
         i = re.sub("TEMPLATE_LIBS3_MAKEFILE_STRING", libs3_makefile_string, i)
         i = re.sub("TEMPLATE_BOOST_RPATH", boost_rpath, i)
+        i = re.sub("TEMPLATE_BOOST_LIBSTDCXX_RPATH", boost_libstdcxx_rpath, i)
         i = re.sub("TEMPLATE_LIBARCHIVE_RPATH", libarchive_rpath, i)
         i = re.sub("TEMPLATE_AVRO_RPATH", avro_rpath, i)
         i = re.sub("TEMPLATE_AVRO_PATH", avro_root, i)
+        i = re.sub("TEMPLATE_AVRO_LIBSTDCXX_RPATH", avro_libstdcxx_rpath, i)
+        i = re.sub("TEMPLATE_AVRO_LIBSTDCXX_PATH", avro_libstdcxx_root, i)
         i = re.sub("TEMPLATE_ZMQ_RPATH", zmq_rpath, i)
         i = re.sub("TEMPLATE_ZMQ_PATH", zmq_root, i)
-        i = re.sub("TEMPLATE_CPPZMQ_PATH", cppzmq_root, i)
+        i = re.sub("TEMPLATE_ZMQ_LIBSTDCXX_RPATH", zmq_libstdcxx_rpath, i)
+        i = re.sub("TEMPLATE_ZMQ_LIBSTDCXX_PATH", zmq_libstdcxx_root, i)
+        i = re.sub("TEMPLATE_CPPZMQ_LIBSTDCXX_PATH", cppzmq_libstdcxx_root, i)
         i = re.sub("TEMPLATE_FMT_PATH", fmt_root, i)
+        i = re.sub("TEMPLATE_FMT_LIBSTDCXX_PATH", fmt_libstdcxx_root, i)
         i = re.sub("TEMPLATE_JSON_PATH", json_root, i)
         run_cmd(i, run_env=myenv, unsafe_shell=True, check_rc='build failed')
 
