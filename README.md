@@ -23,7 +23,7 @@ In a new container, run the following:
 
 ```bash
 apt-get update
-apt-get install -y sudo git python3 python3-distro
+apt-get install -y sudo git python3 python3-distro python3-setuptools
 ./install_prerequisites.py
 
 update-alternatives --install /usr/local/bin/gcc gcc /usr/bin/gcc-10 1
@@ -37,7 +37,7 @@ make # or "make server" for packages specific to building the iRODS server.
 
 ```bash
 apt-get update
-apt-get install -y sudo git python3 python3-distro
+apt-get install -y sudo git python3 python3-distro python3-setuptools
 ./install_prerequisites.py
 
 make # or "make server" for packages specific to building the iRODS server.
@@ -46,7 +46,7 @@ make # or "make server" for packages specific to building the iRODS server.
 ## RHEL / CentOS 7
 
 ```bash
-yum install -y sudo git python3 epel-release
+yum install -y sudo git python3 epel-release python3-setuptools
 yum install -y python36-distro
 
 # Installing the prerequistes must be done before enabling the GCC compiler
@@ -62,7 +62,7 @@ make # or "make server" for packages specific to building the iRODS server.
 ## RHEL / AlmaLinux / Rocky Linux 8
 
 ```bash
-dnf install -y sudo git python3 python3-distro
+dnf install -y sudo git python3 python3-distro python3-setuptools
 
 # Installing the prerequistes must be done before enabling the GCC compiler
 # environment.
@@ -77,7 +77,7 @@ make # or "make server" for packages specific to building the iRODS server.
 ## RHEL / AlmaLinux / Rocky Linux 9
 
 ```bash
-dnf install -y sudo git python3 python3-distro
+dnf install -y sudo git python3 python3-distro python3-setuptools
 ./install_prerequisites.py
 make # or "make server" for packages specific to building the iRODS server.
 ```
