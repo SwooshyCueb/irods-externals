@@ -79,7 +79,7 @@
             "git submodule update --init",
             "./bootstrap.sh --prefix=TEMPLATE_INSTALL_PREFIX --with-python=/usr/bin/python3 --with-icu",
             "./b2 headers",
-            "./b2 install toolset=clang --without-mpi threading=multi link=shared cxxstd=20 cxxflags='-fPIC -DBOOST_SYSTEM_NO_DEPRECATED -Dconsteval=constexpr' linkflags='-Wl,-rpath,/TEMPLATE_BOOST_RPATH' -jTEMPLATE_JOBS"
+            "./b2 install --without-mpi threading=multi link=shared cxxstd=20 cxxflags='-fPIC -DBOOST_SYSTEM_NO_DEPRECATED -Dconsteval=constexpr' linkflags='-Wl,-rpath,/TEMPLATE_BOOST_RPATH' -jTEMPLATE_JOBS"
         ],
         "external_build_steps": [
             "ls -l TEMPLATE_INSTALL_PREFIX/../* ; cp -rf TEMPLATE_INSTALL_PREFIX/../* ../../ ; ls -l ../../"
