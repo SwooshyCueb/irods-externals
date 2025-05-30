@@ -11,7 +11,7 @@ Currently tested on:
 
 This repository is expected to build in a VM or container environment that is isolated from other software or build environments. Pre-written dockerfiles can be found in the [development environment repository](https://github.com/irods/irods_development_environment/).
 
-The automated scripts run commands as `sudo` and update system libraries and compilers, etc.
+The automated scripts update system libraries and compilers, etc.
 
 In a new container, run the following:
 
@@ -19,7 +19,7 @@ In a new container, run the following:
 
 ```bash
 apt-get update
-apt-get install -y sudo git python3 python3-distro python3-setuptools
+apt-get install -y git python3 python3-distro python3-setuptools
 ./install_prerequisites.py
 
 make # or "make server" for packages specific to building the iRODS server.
@@ -28,7 +28,7 @@ make # or "make server" for packages specific to building the iRODS server.
 ## RHEL / AlmaLinux / Rocky Linux 9
 
 ```bash
-dnf install -y sudo git python3 python3-distro python3-setuptools
+dnf install -y git python3 python3-distro python3-setuptools
 ./install_prerequisites.py
 make # or "make server" for packages specific to building the iRODS server.
 ```
